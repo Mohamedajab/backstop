@@ -1,7 +1,9 @@
 # CV-ready project entry
 
-**Backstop — Origin protection on Cloudflare Workers**  
-TypeScript · Cloudflare Workers · Durable Objects · SQLite · Vitest · GitHub Actions  
+**Backstop — Origin protection on Cloudflare Workers**
+
+TypeScript · Cloudflare Workers · Durable Objects · SQLite · Vitest · GitHub Actions
+
 Source: https://github.com/Mohamedajab/backstop
 
 Live demo: https://backstop.backstop.workers.dev
