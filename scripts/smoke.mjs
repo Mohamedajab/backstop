@@ -26,7 +26,7 @@ async function get(path, options) {
 
 const home = await get("/");
 assert.equal(home.response.status, 200);
-assert.match(home.body, /Give the origin a hard day/);
+assert.match(home.body, /Origin cache tester/);
 assert.ok(home.response.headers.get("Content-Security-Policy"));
 assert.equal((await get("/healthz")).response.status, 200);
 const first = await get("/api/content/notice?scenario=healthy");

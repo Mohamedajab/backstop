@@ -16,6 +16,19 @@ test("demo works with a keyboard, explains real responses and stays within the v
   await page.getByRole("button", { name: "Send 10 at once" }).click();
   await expect(page.getByRole("status")).toContainText("10/10 successful");
   await expect(page.locator("#log tr")).toHaveCount(11);
+  await page.getByLabel("Resource", { exact: true }).selectOption("timetable");
+  await page.getByRole("radio", { name: "Slow", exact: false }).check();
+  await page.getByRole("button", { name: "Send a request" }).click();
+  await expect(page.locator("#content-title")).toHaveText(
+    "Library opening hours",
+  );
+  await expect(page.locator("#request-path")).toHaveText(
+    "GET /api/content/timetable?scenario=slow",
+  );
+  await page.getByText("Response body", { exact: true }).click();
+  await expect(page.locator("#response-body")).toContainText(
+    '"scenario": "slow"',
+  );
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   for (const width of [375, 768, 1440]) {
     await page.setViewportSize({ width, height: 1000 });

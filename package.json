@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "A small origin protection experiment on Cloudflare Workers.",
+  "description": "Public JSON caching and request coalescing on Cloudflare Workers.",
   "scripts": {
     "dev": "wrangler dev -c wrangler.jsonc -c fixture/wrangler.jsonc",
     "types": "wrangler types worker-configuration.d.ts",

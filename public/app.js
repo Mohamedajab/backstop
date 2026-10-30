@@ -6,9 +6,8 @@ const descriptions = {
   HIT: "Returned a fresh cached copy. No origin fetch needed.",
   STALE:
     "Returned the last good copy. A refresh runs unless the origin is cooling down.",
-  UNAVAILABLE:
-    "No usable copy yet. The origin is unavailable; try again shortly.",
-  ERROR: "The request could not complete. Check your connection and try again.",
+  UNAVAILABLE: "Origin unavailable. No unexpired cached copy is stored.",
+  ERROR: "Request failed. Check the connection and retry.",
 };
 
 async function send(scenario, resource) {
@@ -44,6 +43,8 @@ async function send(scenario, resource) {
 async function run(count) {
   const scenario = document.querySelector("input[name=scenario]:checked").value;
   const resource = byId("resource").value;
+  byId("request-path").textContent =
+    `GET /api/content/${resource}?scenario=${scenario}`;
   for (const button of document.querySelectorAll("button"))
     button.disabled = true;
   byId("feedback").textContent =
@@ -71,6 +72,7 @@ async function run(count) {
     byId("generated").textContent = result.content.generatedAt
       ? `Origin generated this copy at ${new Date(result.content.generatedAt).toLocaleTimeString()}.`
       : "No cached content was returned.";
+    byId("response-body").textContent = JSON.stringify(result.content, null, 2);
     const success = results.filter((r) => r.status === 200).length;
     byId("feedback").textContent =
       count === 1
