@@ -27,10 +27,10 @@ outage independent of the live demo's clock cycle. Background refreshes count
 towards origin calls but not towards completed client latency. A final assertion
 waits for a fresh hit after recovery; those probes are outside the timed batches.
 
-In the recorded run, fresh protected p95 latency ranged from **61.21–91.45 ms**,
-against **550.97–590.81 ms** for direct-origin requests. Cold protected requests
+In the recorded run, fresh protected p95 latency ranged from **229.59–320.88 ms**,
+against **552.62–587.87 ms** for direct-origin requests. Cold protected requests
 were slower than the direct baseline: coordination does not remove the first
-origin wait. Protected outage p95 ranged from **62.31–75.59 ms**.
+origin wait. Protected outage p95 ranged from **247.63–274.41 ms**.
 
 The script asserts the origin-call counts, cold success, zero fresh origin calls,
 outage success/staleness, and recovery before saving its report. The three cold
@@ -47,8 +47,8 @@ fails between seconds 5 and 20, then recovers.
 
 | Path | Requests | Origin calls | Successful | Failed | Stale responses | p95 latency |
 | --- | --- | --- | --- | --- | --- | --- |
-| Direct | 600 | 600 | 300 | 300 | 0 | 514.36 ms |
-| Backstop | 600 | 18 | 600 | 0 | 303 | 5.41 ms |
+| Direct | 600 | 600 | 300 | 300 | 0 | 513.54 ms |
+| Backstop | 600 | 18 | 600 | 0 | 303 | 10.94 ms |
 
 Origin calls fell by 97% for this workload. Recovery assertions check both
 resources contain content generated after the outage ended. This prevents an
@@ -66,3 +66,11 @@ delays and failures are injected; twenty requests per second is the scheduled
 workload, not a measured capacity ceiling. No production-traffic, crash-during-refresh
 or multi-region guarantee is established. Hosted smoke-check evidence is recorded
 separately in hosted.json.
+
+## Traffic admission during measurement
+
+The harness uses the same rate-limit binding with a 10,000-request allowance
+per 60 seconds, recorded in local.json. The deployed demo uses 60 per IP per
+60 seconds. These measurements exercise cache behaviour under admitted load;
+they do not represent throughput available to a single public-demo visitor or
+measure Cloudflare's distributed rate-limit accuracy.

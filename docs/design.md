@@ -68,3 +68,21 @@ between repeats. The steady-traffic run warms both resources before recording.
 The hosted demo is shared. `STALE` means a cached copy was returned while a refresh
 was started, joined or skipped during cooldown. It does not by itself establish
 that the origin is down. Hosted checks observe the failure cooldown separately.
+
+## Public demo traffic
+
+The gateway checks valid content requests against REQUEST_LIMITER before looking
+up a cache object. Cloudflare supplies CF-Connecting-IP; absent that header,
+local requests share the local-development key. Invalid requests, health and
+static files do not consume that allowance. A rejected request returns 429,
+no-store JSON and Retry-After: 60; the latter is a conservative retry hint,
+not the exact reset time. Binding failures return 503 without reaching the cache.
+
+The binding is configured for 60 requests per 60 seconds. Cloudflare's counters
+are approximate and per location, not a global traffic or cost ceiling. The
+namespace ID must be distinct from unrelated bindings in the same account.
+The benchmark and cache stress tests use a 10,000-request test allowance; the
+browser test uses the real 60-request configuration. This keeps cache measurements
+separate from admission rejection tests.
+
+[Platform behaviour](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/).
