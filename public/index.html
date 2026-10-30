@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A hands-on experiment in keeping public content available when its origin slows down."
+    />
+    <title>Backstop — a little breathing room for your origin</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23233e36'/%3E%3Cpath d='M12 10v20h11a5 5 0 000-10h-8m0 0h6a5 5 0 000-10z' fill='none' stroke='%23d7f78b' stroke-width='3'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#experiment">Skip to experiment</a>
+    <header class="shell topbar">
+      <a class="brand" href="/"
+        ><span class="mark" aria-hidden="true">b.</span>backstop<span
+          class="project-tag"
+          >A RELIABILITY EXPERIMENT</span
+        ></a
+      >
+      <a class="source" href="https://github.com/Mohamedajab/backstop"
+        >Read the code <span aria-hidden="true">↗</span></a
+      >
+    </header>
+    <main class="shell">
+      <section class="intro" aria-labelledby="headline">
+        <div>
+          <p class="eyebrow">
+            <span class="dot" aria-hidden="true"></span> SMALL ORIGIN. A LITTLE
+            BACKUP.
+          </p>
+          <h1 id="headline">
+            The origin can take a break.<br /><em
+              >The page shouldn’t have to.</em
+            >
+          </h1>
+          <p class="lede">
+            A small experiment in keeping public content available. Send a
+            request, slow the origin down, or catch it during an outage. See
+            what the cache does.
+          </p>
+        </div>
+        <div class="policy-card">
+          <span class="small-label">THE HOUSE RULES</span>
+          <p><strong>5s</strong><span>fresh</span></p>
+          <p><strong>60s</strong><span>stale fallback</span></p>
+          <p><strong>1</strong><span>refresh at a time, per resource</span></p>
+        </div>
+      </section>
+
+      <section
+        class="experiment"
+        id="experiment"
+        aria-labelledby="experiment-title"
+      >
+        <div class="section-top">
+          <div>
+            <p class="eyebrow">01 / TRY IT</p>
+            <h2 id="experiment-title">Give the origin a hard day.</h2>
+          </div>
+          <span class="runtime">Cloudflare Workers + Durable Objects</span>
+        </div>
+        <div class="workbench">
+          <div class="controls">
+            <fieldset>
+              <legend>Choose the conditions</legend>
+              <label class="preset"
+                ><input
+                  type="radio"
+                  name="scenario"
+                  value="healthy"
+                  checked
+                /><span
+                  ><strong>Business as usual</strong
+                  ><small>80 ms origin response</small></span
+                ><span class="preset-code">01</span></label
+              >
+              <label class="preset"
+                ><input type="radio" name="scenario" value="slow" /><span
+                  ><strong>Taking its time</strong
+                  ><small>500 ms origin response</small></span
+                ><span class="preset-code">02</span></label
+              >
+              <label class="preset"
+                ><input type="radio" name="scenario" value="flaky" /><span
+                  ><strong>In and out</strong
+                  ><small>10 seconds up, 20 seconds down</small></span
+                ><span class="preset-code">03</span></label
+              >
+            </fieldset>
+            <label class="resource-label" for="resource">Public resource</label>
+            <select id="resource">
+              <option value="notice">Community noticeboard</option>
+              <option value="timetable">Library opening hours</option>
+            </select>
+            <div class="actions">
+              <button id="single" type="button">
+                Send a request <span aria-hidden="true">→</span></button
+              ><button id="burst" class="secondary" type="button">
+                Send 10 at once
+              </button>
+            </div>
+            <p class="hint">
+              Try again within 5 seconds for a fresh hit. After that, the last
+              good copy returns while one refresh runs in the background.
+            </p>
+          </div>
+          <div class="result-panel" aria-labelledby="result-title">
+            <div class="result-heading">
+              <span class="small-label" id="result-title">LATEST RESPONSE</span
+              ><span class="status-badge" id="badge">READY</span>
+            </div>
+            <div class="metrics">
+              <div>
+                <span class="small-label">ROUND TRIP</span
+                ><strong id="latency">—<small> ms</small></strong>
+              </div>
+              <div>
+                <span class="small-label">CONTENT AGE</span
+                ><strong id="age">—<small> s</small></strong>
+              </div>
+              <div>
+                <span class="small-label">HTTP STATUS</span
+                ><strong id="http-status">—</strong>
+              </div>
+            </div>
+            <div class="payload">
+              <span class="small-label">PUBLIC CONTENT</span>
+              <h3 id="content-title">Nothing fetched yet.</h3>
+              <p id="content-message">The noticeboard is ready when you are.</p>
+              <p class="generated" id="generated">
+                Responses are real requests to this deployment.
+              </p>
+            </div>
+            <p class="feedback" id="feedback" role="status" aria-live="polite">
+              Choose a preset and send your first request.
+            </p>
+          </div>
+        </div>
+        <div class="request-log">
+          <div class="log-heading">
+            <h3>Request notebook</h3>
+            <span>Last 20 requests · newest first</span>
+          </div>
+          <div
+            class="table-scroll"
+            role="region"
+            aria-label="Recent requests"
+            tabindex="0"
+          >
+            <table>
+              <caption class="sr-only">
+                Timing and cache state for recent requests
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">TIME</th>
+                  <th scope="col">CONDITIONS</th>
+                  <th scope="col">CACHE</th>
+                  <th scope="col">AGE</th>
+                  <th scope="col">ROUND TRIP</th>
+                  <th scope="col">HTTP</th>
+                </tr>
+              </thead>
+              <tbody id="log">
+                <tr>
+                  <td colspan="6" class="empty">
+                    Your requests will show up here.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="shared-note">
+          <span aria-hidden="true">↳</span> This is a shared demo. Other
+          visitors can warm the same cache. Outages follow the server clock, so
+          a cold request during downtime may return 503. Timing includes your
+          network.
+        </p>
+      </section>
+
+      <section class="explanation" aria-labelledby="how-title">
+        <div>
+          <p class="eyebrow">02 / UNDER THE HOOD</p>
+          <h2 id="how-title">One refresh.<br />A little less panic.</h2>
+          <p>
+            Ten people asking for the same expired content shouldn’t mean ten
+            trips to a struggling origin.
+          </p>
+        </div>
+        <div class="steps">
+          <article>
+            <span>01</span>
+            <div>
+              <h3>Check the last good copy</h3>
+              <p>
+                Fresh content returns immediately. Recently stale content is
+                still useful, so it returns while a refresh happens.
+              </p>
+            </div>
+          </article>
+          <article>
+            <span>02</span>
+            <div>
+              <h3>Let one request do the work</h3>
+              <p>
+                A Durable Object coordinates each resource. Concurrent cold
+                requests wait for the same origin fetch.
+              </p>
+            </div>
+          </article>
+          <article>
+            <span>03</span>
+            <div>
+              <h3>Know when to stop</h3>
+              <p>
+                A 2-second timeout and failure cooldown protect the origin.
+                After 65 seconds, old content stops being a fallback.
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+      <footer>
+        <span
+          >Built by <a href="https://github.com/Mohamedajab">Mohamed Ajab</a> ·
+          An experiment, with limits.</span
+        ><a
+          href="https://github.com/Mohamedajab/backstop#what-this-doesnt-prove"
+          >Read the tradeoffs ↗</a
+        >
+      </footer>
+    </main>
+  </body>
+</html>

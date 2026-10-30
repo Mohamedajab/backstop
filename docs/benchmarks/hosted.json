@@ -1,0 +1,229 @@
+{
+  "recordedAt": "2026-10-30T02:11:44.839Z",
+  "base": "https://backstop.backstop.workers.dev",
+  "command": "npm run smoke -- https://backstop.backstop.workers.dev",
+  "checks": {
+    "warmed": true,
+    "stale": true,
+    "cooldown": true
+  },
+  "caveat": "Bounded smoke check from one client against shared demo state; not a load test. Fixture has workers_dev and preview_urls disabled in its deployed configuration.",
+  "samples": [
+    {
+      "path": "/",
+      "status": 200,
+      "cache": null,
+      "age": null,
+      "origin": null,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "ms": 121
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "cache": null,
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 37
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "cache": "STALE",
+      "age": "20",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 82
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "cache": "HIT",
+      "age": "0",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 35
+    },
+    {
+      "path": "/api/content/timetable?scenario=slow",
+      "status": 200,
+      "cache": "COALESCED",
+      "age": "0",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 884
+    },
+    {
+      "path": "/api/content/timetable?scenario=slow",
+      "status": 200,
+      "cache": "COALESCED",
+      "age": "0",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 887
+    },
+    {
+      "path": "/api/content/timetable?scenario=slow",
+      "status": 200,
+      "cache": "MISS",
+      "age": "0",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 883
+    },
+    {
+      "path": "/api/content/timetable?scenario=slow",
+      "status": 200,
+      "cache": "COALESCED",
+      "age": "0",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 886
+    },
+    {
+      "path": "/api/content/timetable?scenario=slow",
+      "status": 200,
+      "cache": "COALESCED",
+      "age": "0",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 888
+    },
+    {
+      "path": "/api/content/timetable?scenario=slow",
+      "status": 200,
+      "cache": "COALESCED",
+      "age": "0",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 881
+    },
+    {
+      "path": "/api/content/timetable?scenario=slow",
+      "status": 200,
+      "cache": "COALESCED",
+      "age": "0",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 882
+    },
+    {
+      "path": "/api/content/timetable?scenario=slow",
+      "status": 200,
+      "cache": "COALESCED",
+      "age": "0",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 888
+    },
+    {
+      "path": "/api/content/timetable?scenario=slow",
+      "status": 200,
+      "cache": "COALESCED",
+      "age": "0",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 885
+    },
+    {
+      "path": "/api/content/timetable?scenario=slow",
+      "status": 200,
+      "cache": "COALESCED",
+      "age": "0",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 884
+    },
+    {
+      "path": "/api/content/notice?url=https://example.com",
+      "status": 400,
+      "cache": null,
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 23
+    },
+    {
+      "path": "/api/content/notice",
+      "status": 400,
+      "cache": null,
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 23
+    },
+    {
+      "path": "/api/content/notice",
+      "status": 405,
+      "cache": null,
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 19
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 200,
+      "cache": "MISS",
+      "age": "0",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 494
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 200,
+      "cache": "HIT",
+      "age": "1",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 27
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 200,
+      "cache": "HIT",
+      "age": "2",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 35
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 200,
+      "cache": "HIT",
+      "age": "3",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 39
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 200,
+      "cache": "HIT",
+      "age": "4",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 35
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 200,
+      "cache": "STALE",
+      "age": "5",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 36
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 200,
+      "cache": "STALE",
+      "age": "6",
+      "origin": "cooldown",
+      "cacheControl": "no-store",
+      "ms": 27
+    }
+  ]
+}

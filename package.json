@@ -1,0 +1,29 @@
+{
+  "name": "backstop",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A small origin protection experiment on Cloudflare Workers.",
+  "scripts": {
+    "dev": "wrangler dev -c wrangler.jsonc -c fixture/wrangler.jsonc",
+    "types": "wrangler types worker-configuration.d.ts",
+    "typecheck": "npm run types && tsc --noEmit",
+    "test": "vitest run",
+    "bench": "node scripts/benchmark.mjs",
+    "check": "npm run typecheck && npm test && npm run dry-run",
+    "dry-run": "wrangler deploy --dry-run --outdir .dry-run/gateway && wrangler deploy -c fixture/wrangler.jsonc --dry-run --outdir ../.dry-run/fixture",
+    "deploy": "wrangler deploy -c fixture/wrangler.jsonc && wrangler deploy",
+    "test:browser": "playwright test",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@cloudflare/vitest-plugin": "^1.4.11",
+    "@playwright/test": "^1.64.1",
+    "esbuild": "^0.28.2",
+    "miniflare": "^5.20261023.3-beta",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.12",
+    "wrangler": "^4.156.0"
+  }
+}
