@@ -8,9 +8,11 @@ dependency versions requested by package.json. The exact dependency tree is in
 package-lock.json.
 
 There are three independent repeats. Each starts a new gateway runtime with
-empty temporary SQLite-backed storage. Each batch sends fifty requests
-concurrently. The direct baseline and protected path use the same resource,
-scenario and concurrency, sequentially.
+empty temporary SQLite-backed storage. Two gateway Workers share one Durable
+Object namespace. Each batch sends fifty requests concurrently across both
+gateways. The direct baseline and protected path use the same resource, scenario
+and concurrency, sequentially. Each protected cold burst must make one origin
+call across both gateways.
 
 | Phase | Direct origin calls, per repeat | Protected origin calls, per repeat | Protected successful responses |
 | --- | --- | --- | --- |
@@ -25,20 +27,42 @@ outage independent of the live demo's clock cycle. Background refreshes count
 towards origin calls but not towards completed client latency. A final assertion
 waits for a fresh hit after recovery; those probes are outside the timed batches.
 
-In the recorded run, fresh protected p95 latency ranged from **64.26–111.01 ms**,
-against **552.47–582.63 ms** for direct-origin requests. Cold protected requests
+In the recorded run, fresh protected p95 latency ranged from **61.21–91.45 ms**,
+against **550.97–590.81 ms** for direct-origin requests. Cold protected requests
 were slower than the direct baseline: coordination does not remove the first
-origin wait. Protected outage p95 ranged from **90.42–220.95 ms**, showing why the
-more useful conclusion is successful stale fallback and fewer origin calls,
-rather than a claim that every request gets faster.
+origin wait. Protected outage p95 ranged from **62.31–75.59 ms**.
 
 The script asserts the origin-call counts, cold success, zero fresh origin calls,
 outage success/staleness, and recovery before saving its report. The three cold
 bursts reduced origin fetches from 150 to 3 (98%); the three outage batches kept
 150/150 responses available using previously cached content.
 
-These measurements describe one Windows machine with no geographic network
-path. Runtime startup, local IPC, host callbacks and scheduling affect timings.
-The baseline and protected batches do not run simultaneously. There is no
-throughput, sustained-load, crash-during-refresh or multi-region guarantee.
-Hosted smoke-check evidence is recorded separately in hosted.json.
+## Steady traffic
+
+After the third burst repeat, both resources are warmed, then an open-loop
+schedule sends one request every 50 ms to each path for 30 seconds. Requests
+alternate between the noticeboard and timetable and are split between both
+gateways. Direct and protected traffic run concurrently. The controlled origin
+fails between seconds 5 and 20, then recovers.
+
+| Path | Requests | Origin calls | Successful | Failed | Stale responses | p95 latency |
+| --- | --- | --- | --- | --- | --- | --- |
+| Direct | 600 | 600 | 300 | 300 | 0 | 514.36 ms |
+| Backstop | 600 | 18 | 600 | 0 | 303 | 5.41 ms |
+
+Origin calls fell by 97% for this workload. Recovery assertions check both
+resources contain content generated after the outage ended. This prevents an
+implementation that keeps serving the same old copy from passing the check.
+Per-request records include the gateway, scheduled and actual dispatch times,
+status, cache state and latency.
+
+The script asserts counts, successful fallback and recovery, rather than latency
+thresholds. GitHub Actions reruns it and uploads the resulting JSON. The committed
+data is from the local Windows run; CI artifact timings will differ.
+
+These measurements describe one machine with no geographic network path. Runtime
+startup, local IPC, host callbacks and scheduling affect timings. The origin's
+delays and failures are injected; twenty requests per second is the scheduled
+workload, not a measured capacity ceiling. No production-traffic, crash-during-refresh
+or multi-region guarantee is established. Hosted smoke-check evidence is recorded
+separately in hosted.json.

@@ -51,10 +51,12 @@ function summarize(run, mode, phase, results, originCalls) {
 try {
   for (let run = 1; run <= 3; run++) {
     let calls = 0;
+    let directCalls = 0;
     let down = false;
     const pending = new Set();
-    const origin = async (request) => {
+    const origin = async (request, mode = "protected") => {
       calls++;
+      if (mode === "direct") directCalls++;
       const work = down
         ? sleep(80).then(
             () => new Response("controlled outage", { status: 503 }),
@@ -69,35 +71,57 @@ try {
     };
     const gatewayWorker = new Miniflare(
       convertV4MiniflareOptions({
-        name: "gateway",
-        modules: true,
-        script: gateway.outputFiles[0].text,
-        compatibilityDate: "2026-10-30",
-        durableObjects: {
-          RESOURCES: { className: "ResourceCache", useSQLite: true },
-        },
-        serviceBindings: { ORIGIN: origin },
+        workers: ["gateway-a", "gateway-b"].map((name) => ({
+          name,
+          modules: true,
+          script: gateway.outputFiles[0].text,
+          compatibilityDate: "2026-10-30",
+          durableObjects: {
+            RESOURCES: {
+              className: "ResourceCache",
+              scriptName: "gateway-a",
+              useSQLite: true,
+            },
+          },
+          serviceBindings: { ORIGIN: (request) => origin(request) },
+        })),
       }),
     );
     try {
+      const gateways = await Promise.all(
+        ["gateway-a", "gateway-b"].map((name) => gatewayWorker.getWorker(name)),
+      );
+      const measure = async (mode, path, index) => {
+        const start = performance.now();
+        const gatewayIndex = Math.floor(index / 2) % gateways.length;
+        const response =
+          mode === "direct"
+            ? await origin(path, "direct")
+            : await gateways[gatewayIndex].fetch(path);
+        await response.arrayBuffer();
+        return {
+          index,
+          gateway:
+            mode === "direct"
+              ? null
+              : `gateway-${gatewayIndex === 0 ? "a" : "b"}`,
+          status: response.status,
+          cache: response.headers.get("X-Backstop-Cache"),
+          ms: Math.round((performance.now() - start) * 100) / 100,
+        };
+      };
       const batch = async (mode, phase) => {
         const before = calls;
         const results = await Promise.all(
-          Array.from({ length: total }, async (_, index) => {
-            const start = performance.now();
-            const response =
-              mode === "direct"
-                ? await origin(url)
-                : await gatewayWorker.dispatchFetch(url);
-            await response.arrayBuffer();
-            return {
-              index,
-              status: response.status,
-              cache: response.headers.get("X-Backstop-Cache"),
-              ms: Math.round((performance.now() - start) * 100) / 100,
-            };
-          }),
+          Array.from({ length: total }, (_, index) =>
+            measure(mode, url, index),
+          ),
         );
+        if (mode === "protected")
+          assert.equal(
+            new Set(results.map((result) => result.gateway)).size,
+            2,
+          );
         // Include background refreshes in origin-call totals without timing them as client latency.
         await Promise.all([...pending]);
         const sample = summarize(run, mode, phase, results, calls - before);
@@ -139,6 +163,81 @@ try {
         Date.now() < deadline
       );
       assert.equal(recovered.headers.get("X-Backstop-Cache"), "HIT");
+
+      if (run === 3) {
+        const resources = ["notice", "timetable"].map(
+          (resource) =>
+            `https://backstop.test/api/content/${resource}?scenario=slow`,
+        );
+        for (const path of resources) {
+          const warm = await gateways[0].fetch(path);
+          assert.equal(warm.status, 200);
+          await warm.arrayBuffer();
+        }
+        const before = calls;
+        const beforeDirect = directCalls;
+        const started = Date.now();
+        const requests = [];
+        // An open-loop schedule keeps arrivals going even while earlier requests are slow.
+        for (let index = 0; index < 600; index++) {
+          await sleep(Math.max(0, started + index * 50 - Date.now()));
+          const elapsed = Date.now() - started;
+          down = elapsed >= 5_000 && elapsed < 20_000;
+          for (const mode of ["direct", "protected"]) {
+            requests.push(
+              measure(mode, resources[index % resources.length], index).then(
+                (result) => ({
+                  ...result,
+                  mode,
+                  scheduledMs: index * 50,
+                  dispatchedMs: elapsed,
+                }),
+              ),
+            );
+          }
+        }
+        const results = await Promise.all(requests);
+        await Promise.all([...pending]);
+        const directOriginCalls = directCalls - beforeDirect;
+        const protectedOriginCalls = calls - before - directOriginCalls;
+        for (const mode of ["direct", "protected"]) {
+          const measurements = results.filter((result) => result.mode === mode);
+          const sample = summarize(
+            run,
+            mode,
+            "steady traffic, outage and recovery",
+            measurements,
+            mode === "direct" ? directOriginCalls : protectedOriginCalls,
+          );
+          samples.push(sample);
+          raw.push({ run, mode, phase: sample.phase, results: measurements });
+          console.log(JSON.stringify(sample));
+        }
+        assert.equal(directOriginCalls, 600);
+        assert.equal(
+          results.filter(
+            (result) => result.mode === "protected" && result.status === 200,
+          ).length,
+          600,
+        );
+        assert.ok(
+          results.some(
+            (result) => result.mode === "direct" && result.status === 503,
+          ),
+        );
+        assert.ok(
+          protectedOriginCalls < 60,
+          "Origin work should fall by more than 90% for this workload",
+        );
+        for (const path of resources) {
+          const response = await gateways[0].fetch(path);
+          const content = await response.json();
+          assert.ok(
+            Date.parse(content.generatedAt) >= started + 20_000,
+            "Content must refresh after recovery",
+          );
+        }
+      }
     } finally {
       await gatewayWorker.dispose();
     }
@@ -163,14 +262,27 @@ const report = {
     repeats: 3,
     requestsPerBatch: total,
     concurrency: total,
+    gateways: ["gateway-a", "gateway-b"],
+    coordination:
+      "Both gateway Workers reference the same Durable Object namespace on gateway-a",
     originHealthyDelayMs: 500,
     outageDelayMs: 80,
     reset: "new gateway runtime and temporary SQLite storage per repeat",
+    steadyTraffic: {
+      repeats: 1,
+      durationMs: 30_000,
+      requestsPerSecondPerMode: 20,
+      resources: 2,
+      startsWarm: true,
+      outageFromMs: 5_000,
+      outageUntilMs: 20_000,
+      scope: "local only",
+    },
   },
   caveats: [
     "Local workerd runtimes on one machine; no WAN or geographic latency.",
     "Controlled fixture outage injected only in this local harness.",
-    "Direct and protected batches use the same URL and concurrency, run sequentially.",
+    "Burst baselines run sequentially; steady traffic runs both modes concurrently.",
     "Request coalescing reduces origin work; it does not speed up the first cold origin fetch.",
   ],
   samples,

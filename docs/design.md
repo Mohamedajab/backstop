@@ -51,10 +51,19 @@ demo request exercises the gateway.
 
 ## Measurement
 
-The local benchmark compares the same fifty-request workload directly against
-the fixture and through the gateway. The harness controls outages and counts
-origin calls at the service boundary. Client timing stops when the body is read;
-background work is counted separately. Storage is reset between repeats.
+The local benchmark routes requests through two gateway Workers that reference
+the same object namespace. The cold-burst assertion requires one origin fetch
+across both gateways; separate gateway-local caches would fetch twice.
+
+Three repeats compare fifty-request bursts directly against the fixture and
+through the gateways. A separate open-loop schedule sends twenty requests per
+second to each path for thirty seconds, across two resources. New requests arrive
+without waiting for earlier ones to finish. The origin is down between seconds
+5 and 20; recovery checks require new content generated after second 20.
+
+The harness counts origin calls at the service boundary. Client timing stops when
+the body is read; background work is counted separately. Burst storage is reset
+between repeats. The steady-traffic run warms both resources before recording.
 
 The hosted demo is shared. `STALE` means a cached copy was returned while a refresh
 was started, joined or skipped during cooldown. It does not by itself establish

@@ -73,12 +73,15 @@ npm run smoke
 
 `check` runs type checking, 29 Workers-runtime cases and deployment dry runs for
 both Workers. The browser test checks keyboard interaction, responses, accessibility
-and layout at 375, 768 and 1440 px. GitHub Actions runs both on pushes and pull requests.
+and layout at 375, 768 and 1440 px. GitHub Actions runs both and the benchmark
+assertions on pushes and pull requests, with each runner's results saved as an artifact.
 
-The benchmark runs three repeats of fifty concurrent requests per phase. Cold
-bursts used **3 origin fetches for 150 requests**, versus 150 on the direct path.
-During a controlled outage, **150/150 protected requests** returned stale content;
-all direct-origin requests failed. These are local single-machine measurements.
+The benchmark routes requests through two gateway Workers sharing one Durable
+Object namespace. Three cold bursts used **3 origin fetches for 150 requests**,
+versus 150 on the direct path. A separate 30-second test schedules 20 requests/sec
+per path across two resources, including a 15-second outage. Backstop returned
+**600/600 successful responses using 18 origin fetches**; the direct path made
+600 origin calls and failed 300 requests. These are local single-machine measurements.
 [Method and per-request data](docs/benchmarks/README.md).
 
 `smoke` checks the hosted demo with a bounded set of requests. To test your own
@@ -106,7 +109,7 @@ No custom domain or DNS changes are needed.
 - A timeout stops waiting; an origin that ignores abort may keep doing work. Late
   results are discarded. A crash during a refresh can cause another origin fetch.
 - The ten-request button is a UI limit, not server-side rate limiting. Public
-  traffic can exhaust free quotas. No sustained-load or multi-region testing was run.
+  traffic can exhaust free quotas. No production load or multi-region testing was run.
 
 References: Cloudflare on [cache stampedes](https://blog.cloudflare.com/sometimes-i-cache/)
 and [Durable Object coordination](https://developers.cloudflare.com/durable-objects/best-practices/rules-of-durable-objects/).
