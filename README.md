@@ -3,7 +3,7 @@
 A public JSON cache on Cloudflare Workers. Concurrent requests share one origin
 fetch; recent cached content stays available while the origin is slow or down.
 
-[Demo](https://backstop.backstop.workers.dev) · [Design notes](docs/design.md) · [Benchmarks](docs/benchmarks/README.md)
+[Demo](https://backstop.backstop.workers.dev) · [Verification and CV notes](docs/verification.md) · [Design notes](docs/design.md) · [Benchmarks](docs/benchmarks/README.md)
 
 ![Request tester showing cache state, response time and request history](docs/screenshots/demo.png)
 
@@ -56,6 +56,11 @@ Responses include `X-Backstop-Cache`, `X-Backstop-Age` in seconds, and
 `X-Backstop-Origin` (`cooldown` or `available-or-unchecked`). API responses use
 `Cache-Control: no-store`, so browser caching does not affect the result.
 
+Valid content requests use a platform limit of 60 requests per 60 seconds per
+client IP. Rejected requests return JSON with HTTP `429` and `Retry-After: 60`,
+before accessing the cache object. Health and static assets are excluded.
+Local requests without Cloudflare's client-IP header share one development key.
+
 The gateway fetches through a private service binding. It accepts only explicitly
 public HTTP 200 JSON responses up to 256 KiB. Cookies, Vary, content encoding and
 private/no-store/no-cache responses are refused; only Content-Type is retained.
@@ -71,7 +76,7 @@ npm run bench
 npm run smoke
 ```
 
-`check` runs type checking, 29 Workers-runtime cases and deployment dry runs for
+`check` runs type checking, 33 Workers-runtime cases and deployment dry runs for
 both Workers. The browser test checks keyboard interaction, responses, accessibility
 and layout at 375, 768 and 1440 px. GitHub Actions runs both and the benchmark
 assertions on pushes and pull requests, with each runner's results saved as an artifact.
@@ -108,8 +113,10 @@ No custom domain or DNS changes are needed.
   measured from the last successful fetch, not from the underlying data's creation.
 - A timeout stops waiting; an origin that ignores abort may keep doing work. Late
   results are discarded. A crash during a refresh can cause another origin fetch.
-- The ten-request button is a UI limit, not server-side rate limiting. Public
-  traffic can exhaust free quotas. No production load or multi-region testing was run.
+- The platform rate limit is approximate and local to each Cloudflare location.
+  Visitors behind one IP share an allowance, while distributed traffic can still
+  exhaust account quotas. It is not an account-wide spending cap. No production
+  load or multi-region testing was run.
 
 References: Cloudflare on [cache stampedes](https://blog.cloudflare.com/sometimes-i-cache/)
 and [Durable Object coordination](https://developers.cloudflare.com/durable-objects/best-practices/rules-of-durable-objects/).

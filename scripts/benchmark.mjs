@@ -83,6 +83,8 @@ try {
               useSQLite: true,
             },
           },
+          // Measure caching under load, separately from the public demo's quota.
+          ratelimits: { REQUEST_LIMITER: { namespace_id: "1001", simple: { limit: 10000, period: 60 } } },
           serviceBindings: { ORIGIN: (request) => origin(request) },
         })),
       }),
@@ -262,6 +264,7 @@ const report = {
     repeats: 3,
     requestsPerBatch: total,
     concurrency: total,
+    rateLimit: "10000 per 60s in the harness; deployed demo uses 60 per IP per 60s",
     gateways: ["gateway-a", "gateway-b"],
     coordination:
       "Both gateway Workers reference the same Durable Object namespace on gateway-a",

@@ -13,6 +13,7 @@ export interface Bindings {
   RESOURCES: DurableObjectNamespace<ResourceCache>;
   ORIGIN: Fetcher;
   ASSETS: Fetcher;
+  REQUEST_LIMITER: RateLimit;
 }
 
 interface CachedContent {
@@ -147,6 +148,14 @@ export default {
       const key = contentKey(url);
       if (!key) return errorResponse("Unknown resource or scenario", 400);
       try {
+        const { success } = await env.REQUEST_LIMITER.limit({
+          key: request.headers.get("CF-Connecting-IP") ?? "local-development",
+        });
+        if (!success) {
+          const response = errorResponse("Too many requests; try again in a minute", 429);
+          response.headers.set("Retry-After", "60");
+          return response;
+        }
         return await env.RESOURCES.get(env.RESOURCES.idFromName(key)).fetch(
           new Request(`https://cache/api/content/${key}`),
         );
