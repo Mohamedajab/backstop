@@ -1,0 +1,322 @@
+{
+  "recordedAt": "2026-10-31T00:27:13.019Z",
+  "base": "https://backstop.backstop.workers.dev",
+  "command": "node scripts/rate-limit-smoke.mjs https://backstop.backstop.workers.dev",
+  "caveat": "Bounded check from one client. Earlier traffic shares its allowance. Platform counters are approximate and per location; this does not measure an exact threshold or an account-wide cap. Run the ordinary smoke/browser checks before this check, or wait for the allowance to refill.",
+  "checks": {
+    "rejected": true,
+    "excludedPathsAvailable": true
+  },
+  "samples": [
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 429,
+      "retryAfter": "60"
+    },
+    {
+      "path": "/healthz",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/app.js",
+      "status": 200,
+      "retryAfter": null
+    },
+    {
+      "path": "/api/content/unknown",
+      "status": 400,
+      "retryAfter": null
+    }
+  ]
+}

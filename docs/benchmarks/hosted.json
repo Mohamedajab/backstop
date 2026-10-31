@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-30T02:20:46.558Z",
+  "recordedAt": "2026-10-31T00:26:44.887Z",
   "base": "https://backstop.backstop.workers.dev",
   "command": "npm run smoke -- https://backstop.backstop.workers.dev",
   "checks": {
@@ -16,7 +16,7 @@
       "age": null,
       "origin": null,
       "cacheControl": "public, max-age=0, must-revalidate",
-      "ms": 324
+      "ms": 202
     },
     {
       "path": "/healthz",
@@ -25,16 +25,25 @@
       "age": null,
       "origin": null,
       "cacheControl": "no-store",
-      "ms": 32
+      "ms": 27
     },
     {
       "path": "/api/content/notice?scenario=healthy",
       "status": 200,
-      "cache": "MISS",
-      "age": "0",
+      "cache": "HIT",
+      "age": "4",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 185
+      "ms": 86
+    },
+    {
+      "path": "/api/content/notice?scenario=healthy",
+      "status": 200,
+      "cache": "STALE",
+      "age": "5",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 47
     },
     {
       "path": "/api/content/notice?scenario=healthy",
@@ -43,97 +52,97 @@
       "age": "0",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 29
+      "ms": 25
     },
     {
       "path": "/api/content/timetable?scenario=slow",
       "status": 200,
-      "cache": "COALESCED",
-      "age": "0",
+      "cache": "HIT",
+      "age": "4",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 590
+      "ms": 30
     },
     {
       "path": "/api/content/timetable?scenario=slow",
       "status": 200,
-      "cache": "COALESCED",
-      "age": "0",
+      "cache": "HIT",
+      "age": "4",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 597
+      "ms": 46
     },
     {
       "path": "/api/content/timetable?scenario=slow",
       "status": 200,
-      "cache": "MISS",
-      "age": "0",
+      "cache": "HIT",
+      "age": "4",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 598
+      "ms": 60
     },
     {
       "path": "/api/content/timetable?scenario=slow",
       "status": 200,
-      "cache": "COALESCED",
-      "age": "0",
+      "cache": "HIT",
+      "age": "4",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 598
+      "ms": 85
     },
     {
       "path": "/api/content/timetable?scenario=slow",
       "status": 200,
-      "cache": "COALESCED",
-      "age": "0",
+      "cache": "HIT",
+      "age": "4",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 593
+      "ms": 84
     },
     {
       "path": "/api/content/timetable?scenario=slow",
       "status": 200,
-      "cache": "COALESCED",
-      "age": "0",
+      "cache": "HIT",
+      "age": "4",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 592
+      "ms": 83
     },
     {
       "path": "/api/content/timetable?scenario=slow",
       "status": 200,
-      "cache": "COALESCED",
-      "age": "0",
+      "cache": "HIT",
+      "age": "4",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 589
+      "ms": 83
     },
     {
       "path": "/api/content/timetable?scenario=slow",
       "status": 200,
-      "cache": "COALESCED",
-      "age": "0",
+      "cache": "HIT",
+      "age": "4",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 595
+      "ms": 79
     },
     {
       "path": "/api/content/timetable?scenario=slow",
       "status": 200,
-      "cache": "COALESCED",
-      "age": "0",
+      "cache": "HIT",
+      "age": "4",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 598
+      "ms": 89
     },
     {
       "path": "/api/content/timetable?scenario=slow",
       "status": 200,
-      "cache": "COALESCED",
-      "age": "0",
+      "cache": "HIT",
+      "age": "4",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 591
+      "ms": 84
     },
     {
       "path": "/api/content/notice?url=https://example.com",
@@ -142,7 +151,7 @@
       "age": null,
       "origin": null,
       "cacheControl": "no-store",
-      "ms": 39
+      "ms": 33
     },
     {
       "path": "/api/content/notice",
@@ -160,7 +169,133 @@
       "age": null,
       "origin": null,
       "cacheControl": "no-store",
-      "ms": 20
+      "ms": 29
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 667
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 76
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 172
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 75
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 144
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 47
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 141
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 76
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 128
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 47
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 168
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 93
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 173
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 503,
+      "cache": "UNAVAILABLE",
+      "age": null,
+      "origin": null,
+      "cacheControl": "no-store",
+      "ms": 72
     },
     {
       "path": "/api/content/notice?scenario=flaky",
@@ -169,7 +304,7 @@
       "age": "0",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 191
+      "ms": 123
     },
     {
       "path": "/api/content/notice?scenario=flaky",
@@ -178,7 +313,7 @@
       "age": "1",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 43
+      "ms": 72
     },
     {
       "path": "/api/content/notice?scenario=flaky",
@@ -187,7 +322,7 @@
       "age": "2",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 29
+      "ms": 34
     },
     {
       "path": "/api/content/notice?scenario=flaky",
@@ -196,7 +331,7 @@
       "age": "3",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 45
+      "ms": 72
     },
     {
       "path": "/api/content/notice?scenario=flaky",
@@ -205,7 +340,7 @@
       "age": "4",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 31
+      "ms": 72
     },
     {
       "path": "/api/content/notice?scenario=flaky",
@@ -214,7 +349,52 @@
       "age": "5",
       "origin": "available-or-unchecked",
       "cacheControl": "no-store",
-      "ms": 34
+      "ms": 77
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 200,
+      "cache": "HIT",
+      "age": "0",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 33
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 200,
+      "cache": "HIT",
+      "age": "2",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 35
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 200,
+      "cache": "HIT",
+      "age": "3",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 33
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 200,
+      "cache": "HIT",
+      "age": "4",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 77
+    },
+    {
+      "path": "/api/content/notice?scenario=flaky",
+      "status": 200,
+      "cache": "STALE",
+      "age": "5",
+      "origin": "available-or-unchecked",
+      "cacheControl": "no-store",
+      "ms": 40
     },
     {
       "path": "/api/content/notice?scenario=flaky",
@@ -223,7 +403,7 @@
       "age": "6",
       "origin": "cooldown",
       "cacheControl": "no-store",
-      "ms": 52
+      "ms": 31
     }
   ]
 }
