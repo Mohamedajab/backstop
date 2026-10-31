@@ -27,10 +27,10 @@ outage independent of the live demo's clock cycle. Background refreshes count
 towards origin calls but not towards completed client latency. A final assertion
 waits for a fresh hit after recovery; those probes are outside the timed batches.
 
-In the recorded run, fresh protected p95 latency ranged from **229.59–320.88 ms**,
-against **552.62–587.87 ms** for direct-origin requests. Cold protected requests
+In the 31 October 2026 recorded run, fresh protected p95 latency ranged from **147.19–193.96 ms**,
+against **545.25–577.37 ms** for direct-origin requests. Cold protected requests
 were slower than the direct baseline: coordination does not remove the first
-origin wait. Protected outage p95 ranged from **247.63–274.41 ms**.
+origin wait. Protected outage p95 ranged from **168.48–251.59 ms**.
 
 The script asserts the origin-call counts, cold success, zero fresh origin calls,
 outage success/staleness, and recovery before saving its report. The three cold
@@ -47,8 +47,8 @@ fails between seconds 5 and 20, then recovers.
 
 | Path | Requests | Origin calls | Successful | Failed | Stale responses | p95 latency |
 | --- | --- | --- | --- | --- | --- | --- |
-| Direct | 600 | 600 | 300 | 300 | 0 | 513.54 ms |
-| Backstop | 600 | 18 | 600 | 0 | 303 | 10.94 ms |
+| Direct | 600 | 600 | 300 | 300 | 0 | 513.38 ms |
+| Backstop | 600 | 18 | 600 | 0 | 303 | 8.16 ms |
 
 Origin calls fell by 97% for this workload. Recovery assertions check both
 resources contain content generated after the outage ended. This prevents an
