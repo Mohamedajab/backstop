@@ -92,6 +92,11 @@ per path across two resources, including a 15-second outage. Backstop returned
 `smoke` checks the hosted demo with a bounded set of requests. To test your own
 deployment: `npm run smoke -- https://your-worker.workers.dev`.
 
+After the ordinary smoke check, `node scripts/rate-limit-smoke.mjs https://your-worker.workers.dev`
+checks a bounded set of requests for JSON 429 and confirms health/assets remain
+available. It consumes the client's allowance; let the window refill before
+running other content checks. [Hosted results and limits](docs/verification.md#hosted-verification-31-october-2026).
+
 ## Deploy
 
 ```sh
